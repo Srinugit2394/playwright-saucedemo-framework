@@ -2,13 +2,16 @@
   {
     "name": "Standard User",
     "username": "standard_user",
-    "password": "secret_sauce",
-    "expectedUrl": "inventory.html"
+    "password": "secret_sauce"
   },
   {
     "name": "Locked Out User",
     "username": "locked_out_user",
-    "password": "secret_sauce",
-    "expectedUrl": "/"
+    "password": "secret_sauce"
+  },
+  {
+    "name": "Problem User",
+    "username": "problem_user",
+    "password": "secret_sauce"
   }
 ]
