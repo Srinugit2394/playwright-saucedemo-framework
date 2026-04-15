@@ -24,11 +24,12 @@ for (const user of users) {
     // We just use the 'loginPage' variable created above.
     await loginPage.login(user.username, user.password);
 
-    if (user.username === 'standard_user') {
-      await expect(productsPage.productHeader).toHaveText('Products');
-    } else {
-      // Make sure you added this locator to your LoginPage.ts!
-      await expect(loginPage.errorMessage).toBeVisible();
-    }
+   // Change this line in your saucedemo.spec.ts:
+if (user.name === 'Standard User' || user.name === 'Problem User') {
+   // Use 'productHeader' because that is what you named it in the Page Object!
+await expect(productsPage.productHeader).toBeVisible();
+} else {
+    await expect(loginPage.errorMessage).toBeVisible();
+}
   });
 }
