@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { ProductsPage } from '../pages/ProductsPage';
+import { CheckoutPage } from '../pages/CheckoutPage'; 
 import users from '../data/users.json';
 
 let loginPage: LoginPage;
@@ -12,6 +13,7 @@ test.beforeEach(async ({ page }) => {
   await loginPage.goto();
 });
 
+// --- SECTION 1: DATA-DRIVEN LOGIN TESTS ---
 for (const user of users) {
   test(`Login Test for: ${user.name}`, async ({ page }) => {
     await loginPage.login(user.username, user.password);
@@ -24,8 +26,28 @@ for (const user of users) {
   }); 
 }
 
+// --- SECTION 2: FUNCTIONAL TESTS ---
 test('Standard User can add a product to cart', async ({ page }) => {
   await loginPage.login('standard_user', 'secret_sauce');
   await productsPage.addProductToCart('Sauce Labs Backpack');
   await expect(productsPage.cartBadge).toHaveText('1');
+}); // <--- This closes the Cart test properly
+
+test('Standard User can complete a full purchase journey', async ({ page }) => {
+  const checkoutPage = new CheckoutPage(page);
+
+  // 1. Login
+  await loginPage.login('standard_user', 'secret_sauce');
+
+  // 2. Add product and navigate to cart
+  await productsPage.addProductToCart('Sauce Labs Backpack');
+  await page.click('.shopping_cart_link'); 
+  await page.click('[data-test="checkout"]'); 
+
+  // 3. Fill Shipping Info
+  await checkoutPage.fillInformation('John', 'Doe', '12345');
+  await checkoutPage.completeCheckout();
+
+  // 4. Assertion
+  await expect(checkoutPage.successMessage).toHaveText('Thank you for your order!');
 });
