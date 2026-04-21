@@ -1,6 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// Modern ESM way to get __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /**
  * Read environment variables from file.
@@ -13,14 +19,15 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+  
+  /* Reporter to use. */
   reporter: [
     ['html'],
     ['allure-playwright', { outputFolder: 'allure-results' }]
   ],
 
- use: {
-    /* Use process.env.BASE_URL and provide a fallback just in case */
+  use: {
+    /* Use process.env.BASE_URL and provide a fallback */
     baseURL: process.env.BASE_URL || 'https://www.saucedemo.com/',
     trace: 'on',
     screenshot: 'on',
