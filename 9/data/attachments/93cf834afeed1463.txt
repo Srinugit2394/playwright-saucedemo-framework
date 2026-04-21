@@ -1,0 +1,2 @@
+Created Post ID: 101
+Successfully chained and fetched the data!
