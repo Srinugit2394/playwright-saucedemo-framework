@@ -9,7 +9,6 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    # THIS SECTION IS CRITICAL: It gives the bot permission to write the gh-pages branch
     permissions:
       contents: write
     
@@ -23,9 +22,18 @@ jobs:
       run: npm ci
       
     - name: Run Playwright tests
-      run: npx playwright test
+      run: npx playwright test --update-snapshots
       env:
         BASE_URL: ${{ secrets.BASE_URL }}
+
+    # NEW STEP: This saves the Linux snapshots so you can download them!
+    - name: Upload Snapshots Artifact
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: linux-snapshots
+        path: tests/visual.spec.ts-snapshots/
+        retention-days: 1
 
     - name: Get Allure history
       uses: actions/checkout@v4
@@ -44,7 +52,7 @@ jobs:
 
     - name: Deploy report to Github Pages
       if: always()
-      uses: peaceiris/actions-gh-pages@v4 # Updated to v4
+      uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
