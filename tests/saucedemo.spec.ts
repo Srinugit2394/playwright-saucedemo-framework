@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { ProductsPage } from '../pages/ProductsPage';
 import { CheckoutPage } from '../pages/CheckoutPage'; 
-import users from '../data/users.json';
+import users from '../data/users.json' with { type: 'json' };
 
 let loginPage: LoginPage;
 let productsPage: ProductsPage;
