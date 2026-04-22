@@ -1,0 +1,1 @@
+C:\Users\HP\playwrightscript4\tests\visual.spec.ts-snapshots\homepage-baseline-webkit-win32.png is re-generated, writing actual.
